@@ -2,7 +2,7 @@ import time
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BCM)
 
-padPin = 23
+padPin = 16
 GPIO.setup(padPin, GPIO.IN)
 
 alreadyPressed = False
