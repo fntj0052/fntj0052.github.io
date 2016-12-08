@@ -200,108 +200,108 @@
 	<p><b><H3>Unit Testing</H3></b><br>
 		<p>You can use these programs for testing Touch Screen Sensor and Water Pump Sensor.</p>
 		
-		<p><b> touchSensor.py </b><br> 
-		<code><pre>
-		import time
-		import RPi.GPIO as GPIO
-		GPIO.setmode(GPIO.BCM)
+	<p><b> touchSensor.py </b><br> 
+	<code><pre>
+	import time
+	import RPi.GPIO as GPIO
+	GPIO.setmode(GPIO.BCM)
 		
-		padPin = 23
-		GPIO.setup(padPin, GPIO.IN)
-		alreadyPressed = False
-		while True:
-		padPressed = GPIO.input(padPin)
-		if padPressed and not alreadyPressed:
-		print "pressed"
+	padPin = 23
+	GPIO.setup(padPin, GPIO.IN)
+	alreadyPressed = False
+	while True:
+	padPressed = GPIO.input(padPin)
+	if padPressed and not alreadyPressed:
+	print "pressed"
 		
-		alreadyPressed = padPressed
-		time.sleep(0.1)
-		</pre>
-		</code>
+	alreadyPressed = padPressed
+	time.sleep(0.1)
+	</pre>
+	</code>
 		
-		</p>
+	</p>
 		
-		<p><b> waterPumpSensor.py </b><br> 
-		<code><pre>
-		########################################
-		#  Login credentials to send email#
-		########################################
+	<p><b> waterPumpSensor.py </b><br> 
+	<code><pre>
+	########################################
+	#  Login credentials to send email#
+	########################################
 
-		username = 'jv2ee@yahoo.com'
-		password = 'EmailPassword'
+	username = 'jv2ee@yahoo.com'
+	password = 'EmailPassword'
 
-		############################
-		# General Email Parameters #
-		############################ 
+	############################
+	# General Email Parameters #
+	############################ 
 
-		From = "jv2ee@yahoo.com"
-		To =  "jv2ee@yahoo.com"
+	From = "jv2ee@yahoo.com"
+	To =  "jv2ee@yahoo.com"
 
-		#######################################
-		# Email Parameters when sensor is Wet #
-		#######################################
+	#######################################
+	# Email Parameters when sensor is Wet #
+	#######################################
 
-		Subject_wet = "RPi Water Sensor is WET"
-		Body_wet = "Your water sensor is wet."
+	Subject_wet = "RPi Water Sensor is WET"
+	Body_wet = "Your water sensor is wet."
 
-		#######################################
-		# Email Parameters when semsor is Dry #
-		#######################################
+	#######################################
+	# Email Parameters when semsor is Dry #
+	#######################################
 
-		Subject_dry = "RPi Water Sensor is DRY"
-		Body_dry = " Your water sensor is dry again!"
+	Subject_dry = "RPi Water Sensor is DRY"
+	Body_dry = " Your water sensor is dry again!"
 
-		import smtplib
-		from email.mime.text import MIMEText
-		import RPi.GPIO as GPIO
-		import string
-		import time
+	import smtplib
+	from email.mime.text import MIMEText
+	import RPi.GPIO as GPIO
+	import string
+	import time
 
-		#Function Definitions
+	#Function Definitions
 
-		#takes either "wet" or "dry" as the condition.
-		def email(condition):
-    		print "Attempting to send email"
-    		if condition == 'wet':
-        	Body = string.join((
-        	"From: %s" % From,
-        	"To: %s" % To,
-        	"Subject: %s" % Subject_wet,
-        	"",
-       	 	Body_wet,
-		 ), "\r\n")
-    		if condition == 'dry':        
-       		Body = string.join((
-            "From: %s" % From,
-            "To: %s" % To,
-            "Subject: %s" % Subject_dry,
-            "",
-            Body_dry,
-            ), "\r\n")
-    
-    # The actual mail send
-    server = smtplib.SMTP('smtp.gmail.com:587')
-    server.starttls()
-    print "Logging in..."
-    server.login(username,password)
-    print "Logged in as "+username+"."
-    server.sendmail(From, [To], Body)
-    server.quit()
-    print "Email sent."
+	#takes either "wet" or "dry" as the condition.
+	def email(condition):
+    	print "Attempting to send email"
+    	if condition == 'wet':
+        Body = string.join((
+        "From: %s" % From,
+        "To: %s" % To,
+        "Subject: %s" % Subject_wet,
+        "",
+       	Body_wet,
+	 ), "\r\n")
+    	if condition == 'dry':        
+       	Body = string.join((
+        "From: %s" % From,
+        "To: %s" % To,
+        "Subject: %s" % Subject_dry,
+        "",
+        Body_dry,
+        ), "\r\n")
+        
+	# The actual mail send
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        server.starttls()
+        print "Logging in..."
+        server.login(username,password)
+        print "Logged in as "+username+"."
+        server.sendmail(From, [To], Body)
+        server.quit()
+        print "Email sent."
 
-#Tests whether wter is present.
-# returns 0 for dry
-# returns 1 for wet
-# tested to work on pin 18 
-def RCtime (RCpin):
-    reading = 0
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(RCpin, GPIO.OUT)
-    GPIO.output(RCpin, GPIO.LOW)
-    time.sleep(0.1) 
-    GPIO.setup(RCpin, GPIO.IN)
-    # This takes about 1 millisecond per loop cycle
-    while True:
+	#Tests whether wter is present.
+	# returns 0 for dry
+	# returns 1 for wet
+	# tested to work on pin 18 
+	def RCtime (RCpin):
+    	reading = 0
+    	GPIO.setmode(GPIO.BCM)
+    	GPIO.setup(RCpin, GPIO.OUT)
+    	GPIO.output(RCpin, GPIO.LOW)
+    	time.sleep(0.1) 
+    	GPIO.setup(RCpin, GPIO.IN)
+    	# This takes about 1 millisecond per loop cycle
+    	while True:
         if (GPIO.input(RCpin) == GPIO.LOW):
             reading += 1
         if reading >= 1000:
@@ -310,24 +310,24 @@ def RCtime (RCpin):
             return 1
 
 
-def buzz_on (pin):
+	def buzz_on (pin):
 
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, GPIO.HIGH)
+    	GPIO.setmode(GPIO.BCM)
+    	GPIO.setup(pin, GPIO.OUT)
+    	GPIO.output(pin, GPIO.HIGH)
 
-def buzz_off(pin):
+	def buzz_off(pin):
 
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, GPIO.LOW)
+    	GPIO.setmode(GPIO.BCM)
+    	GPIO.setup(pin, GPIO.OUT)
+    	GPIO.output(pin, GPIO.LOW)
 
-# Main Loop
+	# Main Loop
 
-print 'Waiting for wetness...'
-while True:
-    time.sleep(1)
-    if RCtime(18) == 1:
+	print 'Waiting for wetness...'
+	while True:
+   	time.sleep(1)
+    	if RCtime(18) == 1:
         print "Sensor is wet"
         email('wet')
         while True:
@@ -358,34 +358,34 @@ while True:
 		
 		<p>Main program  <br><h4>pumpForward.py</h4><br>
 			<code><pre>
-import sys
-import time
-import RPi.GPIO as GPIO
+	import sys
+	import time
+	import RPi.GPIO as GPIO
 
 
-mode=GPIO.getmode()
-print " mode ="+str(mode)
+	mode=GPIO.getmode()
+	print " mode ="+str(mode)
 
 
-StepPinForward=32
-StepPinBackward=36
+	StepPinForward=32
+	StepPinBackward=36
 
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(StepPinForward, GPIO.OUT)
-GPIO.setup(StepPinBackward, GPIO.OUT)
+	GPIO.setmode(GPIO.BOARD)
+	GPIO.setup(StepPinForward, GPIO.OUT)
+	GPIO.setup(StepPinBackward, GPIO.OUT)
 
-def forward(x):
-    GPIO.output(StepPinForward, GPIO.HIGH)
-    print "forwarding running pump"
-    time.sleep(10)
-    GPIO.output(StepPinForward, GPIO.LOW)
+	def forward(x):
+    	GPIO.output(StepPinForward, GPIO.HIGH)
+    	print "forwarding running pump"
+    	time.sleep(10)
+    	GPIO.output(StepPinForward, GPIO.LOW)
 
 
-print "forward pump"
-forward(5)
+	print "forward pump"
+	forward(5)
 
-print "Stopping motor"
-GPIO.cleanup()
+	print "Stopping motor"
+	GPIO.cleanup()
 			</pre>
 			</code>
 	
@@ -393,34 +393,34 @@ GPIO.cleanup()
 	
 	<p>Main program  <br><h4>pumpBack.py</h4><br>
 			<code><pre>
-import sys
-import time
-import RPi.GPIO as GPIO
+	import sys
+	import time
+	import RPi.GPIO as GPIO
 
-mode=GPIO.getmode()
-print " mode ="+str(mode)
-GPIO.cleanup()
-
-
-StepPinForward=32
-StepPinBackward=36
-
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(StepPinForward, GPIO.OUT)
-GPIO.setup(StepPinBackward, GPIO.OUT)
-
-def forward(x):
-    GPIO.output(StepPinBackward, GPIO.HIGH)
-    print "backward running pump"
-    time.sleep(10)
-    GPIO.output(StepPinBackward, GPIO.LOW)
+	mode=GPIO.getmode()
+	print " mode ="+str(mode)
+	GPIO.cleanup()
 
 
-print "backward pump"
-forward(5)
+	StepPinForward=32
+	StepPinBackward=36
 
-print "Stopping motor"
-GPIO.cleanup()
+	GPIO.setmode(GPIO.BOARD)
+	GPIO.setup(StepPinForward, GPIO.OUT)
+	GPIO.setup(StepPinBackward, GPIO.OUT)
+
+	def forward(x):
+    	GPIO.output(StepPinBackward, GPIO.HIGH)
+    	print "backward running pump"
+    	time.sleep(10)
+    	GPIO.output(StepPinBackward, GPIO.LOW)
+
+
+	print "backward pump"
+	forward(5)
+
+	print "Stopping motor"
+	GPIO.cleanup()
 
 			</pre>
 			</code>
