@@ -1,6 +1,7 @@
 import sys
 import time
 import RPi.GPIO as GPIO
+from motor_function import MotorDirection
 
 
 mode=GPIO.getmode()
